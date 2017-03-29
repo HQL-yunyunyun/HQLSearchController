@@ -18,6 +18,7 @@
 		4A680C961E8A539D00BDCD4F /* HQLSearchTagView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A680C951E8A539D00BDCD4F /* HQLSearchTagView.m */; };
 		4A680C991E8A593C00BDCD4F /* HQLSearchTagComponentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A680C981E8A593C00BDCD4F /* HQLSearchTagComponentCell.m */; };
 		4A680C9C1E8A595A00BDCD4F /* HQLSearchTagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A680C9B1E8A595A00BDCD4F /* HQLSearchTagButton.m */; };
+		4A680CA21E8BB66800BDCD4F /* HQLSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A680CA11E8BB66800BDCD4F /* HQLSearchController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,8 @@
 		4A680C981E8A593C00BDCD4F /* HQLSearchTagComponentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HQLSearchTagComponentCell.m; sourceTree = "<group>"; };
 		4A680C9A1E8A595A00BDCD4F /* HQLSearchTagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HQLSearchTagButton.h; sourceTree = "<group>"; };
 		4A680C9B1E8A595A00BDCD4F /* HQLSearchTagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HQLSearchTagButton.m; sourceTree = "<group>"; };
+		4A680CA01E8BB66800BDCD4F /* HQLSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HQLSearchController.h; sourceTree = "<group>"; };
+		4A680CA11E8BB66800BDCD4F /* HQLSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HQLSearchController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +112,8 @@
 		4A680C8A1E8A496F00BDCD4F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				4A680CA01E8BB66800BDCD4F /* HQLSearchController.h */,
+				4A680CA11E8BB66800BDCD4F /* HQLSearchController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -223,6 +228,7 @@
 				4A680C931E8A4AC700BDCD4F /* HQLSearchBar.m in Sources */,
 				4A680C771E8A48C700BDCD4F /* AppDelegate.m in Sources */,
 				4A680C991E8A593C00BDCD4F /* HQLSearchTagComponentCell.m in Sources */,
+				4A680CA21E8BB66800BDCD4F /* HQLSearchController.m in Sources */,
 				4A680C741E8A48C700BDCD4F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -32,6 +32,23 @@
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    self.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.titleLabel.width = self.width - 2 * kTagButtonMargin;
+    self.titleLabel.x = kTagButtonMargin;
+    self.titleLabel.centerY = self.height * 0.5;
+}
+
+- (void)setFrame:(CGRect)frame {
+    CGFloat originHeight = self.height;
+    [super setFrame:frame];
+    if (originHeight != self.height) {
+        [self setBorderStyle:self.borderStyle];
+    }
+}
+
 #pragma mark - prepare config
 
 - (void)prepareConfig {
@@ -50,7 +67,7 @@
             break;
         }
         case HQLSearchTagButtonRoundedStyle: {
-            cornerRadius = self.height * 0.25;
+            cornerRadius = self.height * 0.5;
             break;
         }
     }

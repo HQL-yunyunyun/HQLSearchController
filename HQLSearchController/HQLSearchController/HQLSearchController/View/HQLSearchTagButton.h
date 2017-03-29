@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define kTagButtonMargin 8
+
 typedef enum {
     HQLSearchTagButtonRoundedStyle , // 圆润的边
     HQLSearchTagButtonRectStyle , // 正方形

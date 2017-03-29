@@ -34,6 +34,22 @@
     [self setBackgroundImage:[[UIImage alloc] init]];
     self.tintColor = APP_TINT_COLOR;
     [self setCancelButtonTitle:@"取消"];
+    self.enablesReturnKeyAutomatically = YES;
+    self.returnKeyType = UIReturnKeySearch;
+}
+
+- (UITextField *)getTextField {
+    for (UIView *subView in self.subviews) {
+        if ([subView isKindOfClass:[UITextField class]]) {
+            return (UITextField *)subView;
+        }
+    }
+    return nil;
+}
+
+- (void)setRightCustomView:(UIView *)rightCustomView {
+    _rightCustomView = rightCustomView;
+    [[self getTextField] setRightView:rightCustomView];
 }
 
 - (void)setCancelButtonTitle:(NSString *)cancelButtonTitle {

@@ -10,17 +10,21 @@
 
 #import "HQLSearchTagButton.h"
 
-@interface HQLSearchTagView : UIView
+@class HQLSearchTagComponentModel, HQLSearchTagView;
 
-/**
- 每一个显示部分的数据源(tag button)
- */
-@property (strong, nonatomic) NSArray <NSArray <NSString *>*>*componentsDataSource;
+@protocol HQLSearchTagViewDelegate <NSObject>
 
-/**
- 每一个部件显示的title
- */
-@property (strong, nonatomic) NSArray <NSString *>*componentsTitle;
+- (void)searchTagView:(HQLSearchTagView *)searchTagView didClickButton:(NSIndexPath *)indexPath;
+
+@end
+
+@interface HQLSearchTagView : UIScrollView;
+
+@property (strong, nonatomic) NSArray <HQLSearchTagComponentModel *>*componentsDataSource;
+
+@property (assign, nonatomic) id <HQLSearchTagViewDelegate>hql_delegate;
+
+- (HQLSearchTagButton *)buttonOfIndex:(NSIndexPath *)indexPath;
 
 @end
 
@@ -69,8 +73,10 @@
 @property (strong, nonatomic) UIColor *titleColor;
 @property (strong, nonatomic) UIFont *titleFont;
 
-@property (strong, nonatomic) UIView *titleLeftCustomView;
+@property (strong, nonatomic) UIView *titleRightCustomView;
 
 @property (assign, nonatomic, readonly) CGFloat viewHeight;
+
+- (void)calculateFrameWithCellWidth:(CGFloat)width;
 
 @end

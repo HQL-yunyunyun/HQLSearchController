@@ -19,6 +19,8 @@
 #define kVerticalMargin 16 // button 与 View 的垂直间距
 #define kVerticalpadding 5 // button间的 垂直间距
 
+#define kButtonConstTag 4500
+
 @interface HQLSearchTagComponentCell ()
 
 @property (strong, nonatomic) UIView *titleView;
@@ -33,10 +35,46 @@
 
 @implementation HQLSearchTagComponentCell
 
+#pragma mark - life cycle
+
+- (void)setFrame:(CGRect)frame {
+    CGFloat originWidth = self.width;
+    [super setFrame:frame];
+    if (originWidth != self.width) {
+        [self calculateFrame];
+    }
+}
+
 #pragma mark - event
 
 - (void)calculateFrame {
+    // 计算self.titleRightCustomView
+    if (self.titleCustomView) {
+        self.titleCustomView.x = self.titleView.width - self.titleCustomView.width - kHorizontalMargin;
+        self.titleCustomView.centerY = self.titleView.height * 0.5;
+    }
     
+    // 计算button
+    UIButton *lastButton = nil;
+    for (UIButton *button in self.buttonArray) {
+        CGFloat margin = lastButton ? kHorizontalPadding : kHorizontalMargin;
+        CGFloat x = CGRectGetMaxX(lastButton.frame) + margin;
+        // 判断是否超出一行
+        CGFloat currentMaxX = x + button.width + kHorizontalMargin;
+        if (currentMaxX > self.buttonView.width && lastButton) {
+            // 超出范围 换行
+            button.x = kHorizontalMargin;
+            button.y = lastButton.maxY + kVerticalpadding;
+        } else {
+            button.x = x;
+            button.y = lastButton ? lastButton.y : kVerticalMargin;
+        }
+        lastButton = button;
+    }
+    
+    self.buttonView.height = lastButton.maxY + kVerticalMargin;
+    self.height = self.titleView.height + self.buttonView.height;
+    self.viewHeight = self.titleView.height + self.buttonView.height;
 }
 
 - (CGFloat)calculateStringWidth:(NSString *)string maxWidth:(CGFloat)maxWidth font:(UIFont *)font horizontalMargin:(CGFloat)horizontalMargin {
@@ -45,6 +83,21 @@
                                                }];
     CGFloat width = size.width + 2 * horizontalMargin;
     return (width >= maxWidth ? maxWidth : width);
+}
+
+- (void)buttonDidClick:(UIButton *)button {
+    // 根据tag来区别button
+    NSInteger index = button.tag - kButtonConstTag;
+    if ([self.delegate respondsToSelector:@selector(searchTagComponentCell:didClickButton:)]) {
+        [self.delegate searchTagComponentCell:self didClickButton:index];
+    }
+}
+
+- (HQLSearchTagButton *)buttonOfIndex:(NSInteger)index {
+    if (index >= self.buttonArray.count) {
+        return nil;
+    }
+    return [self.buttonArray objectAtIndex:index];
 }
 
 #pragma mark - setter
@@ -64,10 +117,11 @@
     [self.titleLabel setFont:model.titleFont];
     [self.titleLabel setText:model.title];
     [self.titleLabel setTextColor:model.titleColor];
-    self.titleCustomView = model.titleLeftCustomView;
+    self.titleCustomView = model.titleRightCustomView;
     [self.titleView addSubview:self.titleCustomView];
     
     // 设置button
+    NSInteger index = 0;
     for (NSString *string in model.dataSource) {
         // 创建button
         HQLSearchTagButton *button = [HQLSearchTagButton buttonWithType:UIButtonTypeCustom];
@@ -80,7 +134,11 @@
         [button setTitle:string forState:UIControlStateNormal];
         
         // 根据string来确定button的width
-        button.width = [self calculateStringWidth:string maxWidth:model.buttonMaxWidth font:model.buttonFont horizontalMargin:2];
+        button.width = [self calculateStringWidth:string maxWidth:model.buttonMaxWidth font:model.buttonFont horizontalMargin:kTagButtonMargin];
+        
+        button.tag = kButtonConstTag + index;
+        [button addTarget:self action:@selector(buttonDidClick:) forControlEvents:UIControlEventTouchUpInside];
+        index++;
         
         [self.buttonView addSubview:button];
         [self.buttonArray addObject:button];

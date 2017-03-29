@@ -13,7 +13,8 @@
 - (void)setHeight:(CGFloat)height;
 - (void)setX:(CGFloat)x;
 - (void)setY:(CGFloat)y;
-
+- (void)setCenterY:(CGFloat)centerY;
+- (void)setCenterX:(CGFloat)centerX;
 - (void)setSize:(CGSize)size;
 
 - (CGFloat)height;
@@ -22,6 +23,8 @@
 - (CGFloat)y;
 - (CGFloat)maxY;
 - (CGFloat)maxX;
+- (CGFloat)centerY;
+- (CGFloat)centerX;
 - (void)horizontalCenterWithWidth:(CGFloat)width;
 - (void)verticalCenterWithHeight:(CGFloat)height;
 - (void)verticalCenterInSuperView;

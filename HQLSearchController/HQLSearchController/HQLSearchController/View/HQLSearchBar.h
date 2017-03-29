@@ -21,4 +21,6 @@
 
 @property (copy, nonatomic) NSString *cancelButtonTitle;
 
+@property (strong, nonatomic) UIView *rightCustomView;
+
 @end
