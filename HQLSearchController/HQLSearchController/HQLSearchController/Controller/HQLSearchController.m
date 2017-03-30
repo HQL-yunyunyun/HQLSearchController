@@ -32,12 +32,76 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    [self prepareConfig];
 }
 
 #pragma mark - event
 
+- (void)prepareConfig {
+    self.navigationItem.titleView = self.searchBar;
+//    [self.navigationController.navigationBar setNeedsLayout];
+    
+}
+
+// search
+- (void)searchWithKeyWord:(NSString *)keyWord {
+    
+    [self.resultArray removeAllObjects];
+    
+    if (keyWord && ![keyWord isEqualToString:@""]) { // 有值且不为空
+        [self.tagView setHidden:YES];
+        [self.resultView setHidden:NO];
+        
+        if ([self.delegate respondsToSelector:@selector(searchControllerDidSearchWithKeyWord:)]) {
+            [self.resultArray addObjectsFromArray:[self.delegate searchControllerDidSearchWithKeyWord:keyWord]];
+        }
+        [self.resultView reloadData];
+    } else { // 没值
+        [self.tagView setHidden:NO];
+        [self.resultView setHidden:YES];
+    }
+}
+
 #pragma mark - search bar delegate
+
+// 点击取消
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    if ([self.delegate respondsToSelector:@selector(searchController:searchBarCancelButtonDidClick:)]) {
+        [self.delegate searchController:self searchBarCancelButtonDidClick:(HQLSearchBar *)searchBar];
+    }
+}
+
+// 点击搜索
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    if ([self.delegate respondsToSelector:@selector(searchController:searchBarDidClickSearchButton:)]) {
+        [self.delegate searchController:self searchBarDidClickSearchButton:(HQLSearchBar *)searchBar];
+    }
+}
+
+/*
+- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    if (searchBar == self.searchBar) {
+        NSString *targetString = searchBar.text;
+        [targetString stringByReplacingCharactersInRange:range withString:text];
+        [self searchWithKeyWord:targetString];
+    }
+    return YES;
+}
+*/
+
+// searchBar的text改变
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    [self searchWithKeyWord:searchText];
+}
+
+#pragma mark - search tag view delegate
+
+- (void)searchTagView:(HQLSearchTagView *)searchTagView didClickButton:(NSIndexPath *)indexPath {
+    if ([self.delegate respondsToSelector:@selector(searchController:searchTagView:didClickTagButton:)]) {
+        [self.delegate searchController:self searchTagView:searchTagView didClickTagButton:indexPath];
+    }
+}
 
 #pragma mark - table view data source
 
