@@ -44,8 +44,18 @@
 @property (strong, nonatomic) UIView *searchBarRightCustomView;
 @property (assign, nonatomic) UIReturnKeyType searchBarReturnKeyType;
 
+// 搜索结果的显示
+@property (strong, nonatomic, readonly) NSMutableArray *searchResultArray;
+
 @property (strong, nonatomic) NSArray <HQLSearchTagComponentModel *>*tagViewDataSource;
 
 @property (assign, nonatomic) id <HQLSearchControllerDelegate>delegate;
+
+// 设置搜索array
+- (void)setSearchResultWithResultArray:(NSMutableArray *)resultArray;
+
+// 显示Controller
+- (void)showInViewController:(UIViewController *)controller;
+- (void)hideController:(void(^)())completeBlock;
 
 @end

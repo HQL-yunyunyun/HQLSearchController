@@ -17,6 +17,9 @@
 #define kTableViewCellHeight 44
 #define kSearchBarHeight 44
 
+#define kScreenWidth [UIScreen mainScreen].bounds.size.width
+#define kScreenHeight [UIScreen mainScreen].bounds.size.height
+
 @interface HQLSearchController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, HQLSearchTagViewDelegate>
 
 @property (strong, nonatomic) HQLSearchBar *searchBar;
@@ -24,7 +27,7 @@
 //@property (strong, nonatomic) UIVisualEffectView *backgroundView;
 @property (strong, nonatomic) HQLSearchTagView *tagView;
 
-@property (strong, nonatomic) NSMutableArray <NSString *>*resultArray;
+//@property (strong, nonatomic) NSMutableArray <NSString *>*resultArray;
 
 @end
 
@@ -42,25 +45,43 @@
     self.navigationItem.titleView = self.searchBar;
 //    [self.navigationController.navigationBar setNeedsLayout];
     
+    // readOnly ---> 在这里赋值(getter中不知道为什么不能赋值)
+    _searchResultArray = [NSMutableArray array];
 }
 
 // search
 - (void)searchWithKeyWord:(NSString *)keyWord {
     
-    [self.resultArray removeAllObjects];
+    [self.searchResultArray removeAllObjects];
     
     if (keyWord && ![keyWord isEqualToString:@""]) { // 有值且不为空
         [self.tagView setHidden:YES];
         [self.resultView setHidden:NO];
-        
+        // 搜索
         if ([self.delegate respondsToSelector:@selector(searchControllerDidSearchWithKeyWord:)]) {
-            [self.resultArray addObjectsFromArray:[self.delegate searchControllerDidSearchWithKeyWord:keyWord]];
+            [self.searchResultArray addObjectsFromArray:[self.delegate searchControllerDidSearchWithKeyWord:keyWord]];
         }
         [self.resultView reloadData];
     } else { // 没值
         [self.tagView setHidden:NO];
         [self.resultView setHidden:YES];
     }
+}
+
+// 设置resultArray
+- (void)setSearchResultWithResultArray:(NSMutableArray *)resultArray {
+    [self.searchResultArray removeAllObjects];
+    [self.searchResultArray addObjectsFromArray:resultArray];
+    [self.resultView reloadData];
+}
+
+- (void)showInViewController:(UIViewController *)controller {
+    
+}
+
+- (void)hideController:(void (^)())completeBlock {
+
+    
 }
 
 #pragma mark - search bar delegate
@@ -110,7 +131,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.resultArray.count;
+    return self.searchResultArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -119,7 +140,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kResultTableViewCellID];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.textLabel.text = self.resultArray[indexPath.row];
+    cell.textLabel.text = self.searchResultArray[indexPath.row];
     [cell setBackgroundColor:[UIColor clearColor]];
     return cell;
 }
@@ -148,7 +169,7 @@
 
 - (HQLSearchBar *)searchBar {
     if (!_searchBar) {
-        _searchBar = [[HQLSearchBar alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, kSearchBarHeight)];
+        _searchBar = [[HQLSearchBar alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kSearchBarHeight)];
         [_searchBar setShowsCancelButton:YES animated:YES];
         _searchBar.delegate = self;
     }
