@@ -24,10 +24,9 @@
 
 @property (strong, nonatomic) HQLSearchBar *searchBar;
 @property (strong, nonatomic) UITableView *resultView;
-//@property (strong, nonatomic) UIVisualEffectView *backgroundView;
 @property (strong, nonatomic) HQLSearchTagView *tagView;
 
-//@property (strong, nonatomic) NSMutableArray <NSString *>*resultArray;
+@property (strong, nonatomic) UIViewController *targetController;
 
 @end
 
@@ -39,6 +38,10 @@
     [self prepareConfig];
 }
 
+- (void)dealloc {
+    NSLog(@"dealloc ---> %@", NSStringFromClass([self class]));
+}
+
 #pragma mark - event
 
 - (void)prepareConfig {
@@ -47,6 +50,13 @@
     
     // readOnly ---> 在这里赋值(getter中不知道为什么不能赋值)
     _searchResultArray = [NSMutableArray array];
+    
+    [self tagView];
+    if (self.navigationController) {
+        self.navigationItem.titleView = self.searchBar;
+    } else {
+        [self.view addSubview:self.searchBar];
+    }
 }
 
 // search
@@ -75,13 +85,48 @@
     [self.resultView reloadData];
 }
 
-- (void)showInViewController:(UIViewController *)controller {
+- (void)showInViewController:(UIViewController *)controller duringAnimation:(void(^)())duringAnimationBlock {
+    self.targetController = controller;
     
+    // 改变转场方式
+    UIViewController *targetController = controller.navigationController ? controller.navigationController : controller;
+    UIViewController *selfController = self.navigationController ? self.navigationController : self;
+    [targetController.view addSubview:selfController.view];
+    [targetController addChildViewController:selfController];
+    
+    // 改变frame ---> 一般是44
+    selfController.view.frame = CGRectMake(selfController.view.x, 44, selfController.view.width, selfController.view.height);
+    if ([targetController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *nav = (UINavigationController *)targetController;
+        [nav setNavigationBarHidden:YES animated:YES];
+    }
+    [UIView animateWithDuration:0.3 animations:^{
+        selfController.view.y = 0;
+        [self.tagView setAlpha:1];
+        if (duringAnimationBlock) {
+            duringAnimationBlock();
+        }
+    } completion:^(BOOL finished) {
+        [self.searchBar becomeFirstResponder];
+    }];
 }
 
-- (void)hideController:(void (^)())completeBlock {
-
-    
+- (void)hideControllerWithDuringAnimationBlock:(void (^)())duringAnimationBlock completeBlock:(void (^)())completeBlock {
+    UIViewController *targetController = self.targetController.navigationController ? self.targetController.navigationController : self.targetController;
+    UIViewController *selfController = self.navigationController ? self.navigationController : self;
+    if ([targetController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *nav = (UINavigationController *)targetController;
+        [nav setNavigationBarHidden:NO animated:YES];
+    }
+    [UIView animateWithDuration:0.3 animations:^{
+        selfController.view.y = 44;
+        self.tagView.alpha = 0;
+        duringAnimationBlock ? duringAnimationBlock() : nil;
+    } completion:^(BOOL finished) {
+        [selfController.view removeFromSuperview];
+        [selfController removeFromParentViewController];
+        completeBlock ? completeBlock() : nil;
+    }];
 }
 
 #pragma mark - search bar delegate
@@ -91,6 +136,7 @@
     if ([self.delegate respondsToSelector:@selector(searchController:searchBarCancelButtonDidClick:)]) {
         [self.delegate searchController:self searchBarCancelButtonDidClick:(HQLSearchBar *)searchBar];
     }
+//    [self hideControllerWithDuringAnimationBlock:nil completeBlock:nil];
 }
 
 // 点击搜索
@@ -192,6 +238,7 @@
         _tagView = [[HQLSearchTagView alloc] initWithFrame:self.view.bounds];
         _tagView.delegate = self;
         [self.view insertSubview:_tagView atIndex:0];
+        [_tagView setAlpha:0];
     }
     return _tagView;
 }

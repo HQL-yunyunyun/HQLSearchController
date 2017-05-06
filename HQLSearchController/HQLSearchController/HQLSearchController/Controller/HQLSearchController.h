@@ -55,7 +55,7 @@
 - (void)setSearchResultWithResultArray:(NSMutableArray *)resultArray;
 
 // 显示Controller
-- (void)showInViewController:(UIViewController *)controller;
-- (void)hideController:(void(^)())completeBlock;
+- (void)showInViewController:(UIViewController *)controller duringAnimation:(void(^)())duringAnimationBlock;
+- (void)hideControllerWithDuringAnimationBlock:(void(^)())duringAnimationBlock completeBlock:(void(^)())completeBlock;
 
 @end
