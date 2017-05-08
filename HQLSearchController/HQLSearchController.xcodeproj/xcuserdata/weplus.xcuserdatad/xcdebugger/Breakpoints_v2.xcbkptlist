@@ -10,44 +10,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HQLSearchController/HQLSearchController/Controller/HQLSearchController.m"
-            timestampString = "515757557.301189"
+            timestampString = "515926892.136445"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
-            landmarkName = "-showInViewController:duringAnimation:"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
+            landmarkName = "-showInViewController:searchBarOriginPoint:duringAnimation:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HQLSearchController/HQLSearchController/Controller/HQLSearchController.m"
-            timestampString = "515757557.301189"
+            timestampString = "515931183.629556"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "-prepareConfig"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "-showInViewController:searchBarOriginPoint:duringAnimation:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HQLSearchController/HQLSearchController/Controller/HQLSearchController.m"
-            timestampString = "515757557.301189"
+            timestampString = "515931184.74057"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
-            landmarkName = "-showInViewController:duringAnimation:"
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "-showInViewController:searchBarOriginPoint:duringAnimation:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

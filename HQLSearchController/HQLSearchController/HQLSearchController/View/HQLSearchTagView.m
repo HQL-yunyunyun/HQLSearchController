@@ -57,10 +57,15 @@
 - (void)prepareConfig {
     [self tableView];
 //    [self effectView];
+    [self setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
     [super setBackgroundColor:[UIColor clearColor]];
+}
+
+- (void)dealloc {
+    NSLog(@"dealloc ---> %@", NSStringFromClass([self class]));
 }
 
 #pragma mark - search tag component cell delegate

@@ -38,6 +38,10 @@
     self.returnKeyType = UIReturnKeySearch;
 }
 
+- (void)dealloc {
+    NSLog(@"dealloc ---> %@", NSStringFromClass([self class]));
+}
+
 - (UITextField *)getTextField {
     for (UIView *subView in self.subviews) {
         if ([subView isKindOfClass:[UITextField class]]) {

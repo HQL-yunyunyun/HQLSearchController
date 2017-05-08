@@ -51,6 +51,7 @@
                         <nil key="title"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="button" destination="MvP-w6-KBc" id="KwZ-bC-V3c"/>
                         <outlet property="buttonTopConstraint" destination="50q-rW-VTL" id="9yA-na-Fbw"/>
                     </connections>
                 </viewController>

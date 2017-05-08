@@ -43,6 +43,7 @@
 @property (strong, nonatomic) UIImage *searchBarIcon;
 @property (strong, nonatomic) UIView *searchBarRightCustomView;
 @property (assign, nonatomic) UIReturnKeyType searchBarReturnKeyType;
+@property (strong, nonatomic) UIColor *searchBarBackgroundColor;
 
 // 搜索结果的显示
 @property (strong, nonatomic, readonly) NSMutableArray *searchResultArray;
@@ -55,7 +56,7 @@
 - (void)setSearchResultWithResultArray:(NSMutableArray *)resultArray;
 
 // 显示Controller
-- (void)showInViewController:(UIViewController *)controller duringAnimation:(void(^)())duringAnimationBlock;
+- (void)showInViewController:(UIViewController *)controller searchBarOriginPoint:(CGPoint)originPoint duringAnimation:(void(^)())duringAnimationBlock;
 - (void)hideControllerWithDuringAnimationBlock:(void(^)())duringAnimationBlock completeBlock:(void(^)())completeBlock;
 
 @end

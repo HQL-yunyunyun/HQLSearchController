@@ -26,7 +26,12 @@
 @property (strong, nonatomic) UITableView *resultView;
 @property (strong, nonatomic) HQLSearchTagView *tagView;
 
+@property (strong, nonatomic) UIVisualEffectView *effectView;
+
 @property (strong, nonatomic) UIViewController *targetController;
+
+@property (assign, nonatomic) BOOL isHasNavigationController;
+@property (assign, nonatomic) CGPoint originPoint;
 
 @end
 
@@ -45,17 +50,17 @@
 #pragma mark - event
 
 - (void)prepareConfig {
-    self.navigationItem.titleView = self.searchBar;
-//    [self.navigationController.navigationBar setNeedsLayout];
-    
     // readOnly ---> 在这里赋值(getter中不知道为什么不能赋值)
     _searchResultArray = [NSMutableArray array];
+    self.view.backgroundColor = [UIColor clearColor];
+    [self effectView];
     
-    [self tagView];
     if (self.navigationController) {
         self.navigationItem.titleView = self.searchBar;
+        self.isHasNavigationController = YES;
     } else {
         [self.view addSubview:self.searchBar];
+        self.isHasNavigationController = NO;
     }
 }
 
@@ -85,8 +90,9 @@
     [self.resultView reloadData];
 }
 
-- (void)showInViewController:(UIViewController *)controller duringAnimation:(void(^)())duringAnimationBlock {
+- (void)showInViewController:(UIViewController *)controller searchBarOriginPoint:(CGPoint)originPoint duringAnimation:(void(^)())duringAnimationBlock {
     self.targetController = controller;
+    self.originPoint = originPoint;
     
     // 改变转场方式
     UIViewController *targetController = controller.navigationController ? controller.navigationController : controller;
@@ -94,8 +100,12 @@
     [targetController.view addSubview:selfController.view];
     [targetController addChildViewController:selfController];
     
+    /*如果targetController为navigationController 而selfController不是navigationController，那么
+     addChildViewController这个操作就会让将selfController添加到当前childController中，self也有了
+     navigationController，与事实不符*/
+    
     // 改变frame ---> 一般是44
-    selfController.view.frame = CGRectMake(selfController.view.x, 44, selfController.view.width, selfController.view.height);
+    selfController.view.frame = CGRectMake(selfController.view.x, originPoint.y, selfController.view.width, selfController.view.height);
     if ([targetController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *nav = (UINavigationController *)targetController;
         [nav setNavigationBarHidden:YES animated:YES];
@@ -113,13 +123,13 @@
 
 - (void)hideControllerWithDuringAnimationBlock:(void (^)())duringAnimationBlock completeBlock:(void (^)())completeBlock {
     UIViewController *targetController = self.targetController.navigationController ? self.targetController.navigationController : self.targetController;
-    UIViewController *selfController = self.navigationController ? self.navigationController : self;
+    UIViewController *selfController = self.isHasNavigationController ? self.navigationController : self;
     if ([targetController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *nav = (UINavigationController *)targetController;
         [nav setNavigationBarHidden:NO animated:YES];
     }
     [UIView animateWithDuration:0.3 animations:^{
-        selfController.view.y = 44;
+        selfController.view.y = self.originPoint.y;
         self.tagView.alpha = 0;
         duringAnimationBlock ? duringAnimationBlock() : nil;
     } completion:^(BOOL finished) {
@@ -237,10 +247,19 @@
     if (!_tagView) {
         _tagView = [[HQLSearchTagView alloc] initWithFrame:self.view.bounds];
         _tagView.delegate = self;
-        [self.view insertSubview:_tagView atIndex:0];
+        [self.view insertSubview:_tagView atIndex:1];
         [_tagView setAlpha:0];
     }
     return _tagView;
+}
+
+- (UIVisualEffectView *)effectView {
+    if (!_effectView) {
+        _effectView = [[UIVisualEffectView alloc] initWithFrame:self.view.bounds];
+        [_effectView setEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+        [self.view insertSubview:_effectView atIndex:0];
+    }
+    return _effectView;
 }
 
 #pragma mark - setter
@@ -273,6 +292,11 @@
 - (void)setSearchCancelButtonTitle:(NSString *)searchCancelButtonTitle {
     _searchCancelButtonTitle = searchCancelButtonTitle;
     [self.searchBar setCancelButtonTitle:searchCancelButtonTitle];
+}
+
+- (void)setSearchBarBackgroundColor:(UIColor *)searchBarBackgroundColor {
+    _searchBarBackgroundColor = searchBarBackgroundColor;
+    self.searchBar.backgroundColor = searchBarBackgroundColor;
 }
 
 @end

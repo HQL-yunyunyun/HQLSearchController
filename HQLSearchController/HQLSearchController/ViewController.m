@@ -12,9 +12,10 @@
 
 #import "HQLSearchController.h"
 
-@interface ViewController ()
+@interface ViewController () <HQLSearchControllerDelegate>
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *buttonTopConstraint;
-
+@property (weak, nonatomic) IBOutlet UIButton *button;
+@property (strong, nonatomic) UINavigationController *searchController;
 @end
 
 @implementation ViewController
@@ -36,22 +37,30 @@
 //    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
+- (void)dealloc {
+    NSLog(@"dealloc ---> %@", NSStringFromClass([self class]));
+}
+
 - (IBAction)buttonDidClick:(UIButton *)sender {
     HQLSearchController *controller = [HQLSearchController new];
     controller.delegate = self;
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:controller];
+    self.searchController = [[UINavigationController alloc] initWithRootViewController:controller];
     __weak typeof(self) weakSelf = self;
-    [controller showInViewController:self duringAnimation:^{
+    [controller showInViewController:self searchBarOriginPoint:self.button.frame.origin duringAnimation:^{
         weakSelf.buttonTopConstraint.constant = 0;
         [weakSelf.view layoutIfNeeded];
     }];
 //    [self.view layoutIfNeeded];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)searchController:(HQLSearchController *)searchController searchBarCancelButtonDidClick:(HQLSearchBar *)searchBar {
+    __weak typeof(self) weakSelf = self;
+    [searchController hideControllerWithDuringAnimationBlock:^{
+        weakSelf.buttonTopConstraint.constant = 64;
+        [weakSelf.view layoutIfNeeded];
+    } completeBlock:^{
+        weakSelf.searchController = nil;
+    }];
 }
-
 
 @end
