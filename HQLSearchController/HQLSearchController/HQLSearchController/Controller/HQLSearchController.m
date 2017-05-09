@@ -12,6 +12,8 @@
 
 #import "UIView+General.h"
 
+#import "UIImage+Color.h"
+
 #define kResultTableViewCellID @"kRestultTableViewCellID"
 
 #define kTableViewCellHeight 44
@@ -58,6 +60,7 @@
     if (self.navigationController) {
         self.navigationItem.titleView = self.searchBar;
         self.isHasNavigationController = YES;
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage imageWithColor:self.searchBar.backgroundColor] forBarMetrics:UIBarMetricsDefault];
     } else {
         [self.view addSubview:self.searchBar];
         self.isHasNavigationController = NO;
@@ -105,7 +108,11 @@
      navigationController，与事实不符*/
     
     // 改变frame ---> 一般是44
-    selfController.view.frame = CGRectMake(selfController.view.x, originPoint.y, selfController.view.width, selfController.view.height);
+    CGFloat y = self.originPoint.y;
+    if (self.isHasNavigationController) {
+        y -= 20;
+    }
+    selfController.view.frame = CGRectMake(selfController.view.x, y, selfController.view.width, selfController.view.height);
     if ([targetController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *nav = (UINavigationController *)targetController;
         [nav setNavigationBarHidden:YES animated:YES];
@@ -297,6 +304,11 @@
 - (void)setSearchBarBackgroundColor:(UIColor *)searchBarBackgroundColor {
     _searchBarBackgroundColor = searchBarBackgroundColor;
     self.searchBar.backgroundColor = searchBarBackgroundColor;
+    if (self.isHasNavigationController) {
+//        [self.navigationController.navigationBar setBackgroundColor:searchBarBackgroundColor];
+//        [[UINavigationBar appearance] setBackgroundColor:searchBarBackgroundColor];
+        [self.navigationController.navigationBar setBackgroundImage:[UIImage imageWithColor:searchBarBackgroundColor] forBarMetrics:UIBarMetricsDefault];
+    }
 }
 
 @end
