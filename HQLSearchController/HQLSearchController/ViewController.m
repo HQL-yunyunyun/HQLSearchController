@@ -22,19 +22,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-//    HQLSearchTagView *tagView = [[HQLSearchTagView alloc] initWithFrame:self.view.bounds];
-//    [self.view addSubview:tagView];
-//    
-//    HQLSearchTagComponentModel *model = [[HQLSearchTagComponentModel alloc] init];
-//    NSMutableArray *stringArray = [NSMutableArray array];
-//    for (int i = 0; i < 20; i++) {
-//        [stringArray addObject:[NSString stringWithFormat:@"tagButton%d", i]];
-//    }
-//    model.dataSource = stringArray;
-//    model.title = @"这是第一个title";
-//    tagView.componentsDataSource = @[model];
-//    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 - (void)dealloc {

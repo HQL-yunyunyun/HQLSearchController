@@ -12,6 +12,7 @@
 
 @protocol HQLSearchControllerDelegate <NSObject>
 
+@optional
 /**
  根据keyWord搜索
 

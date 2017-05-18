@@ -19,6 +19,8 @@
 #define kTableViewCellHeight 44
 #define kSearchBarHeight 44
 
+#define kNavigationBarAnimationTime 0.25
+
 #define kScreenWidth [UIScreen mainScreen].bounds.size.width
 #define kScreenHeight [UIScreen mainScreen].bounds.size.height
 
@@ -42,7 +44,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self prepareConfig];
+//    [self prepareConfig];
 }
 
 - (void)dealloc {
@@ -94,30 +96,31 @@
 }
 
 - (void)showInViewController:(UIViewController *)controller searchBarOriginPoint:(CGPoint)originPoint duringAnimation:(void(^)())duringAnimationBlock {
+    // 因为在这个方法的时候 controller还没有调用didLoad方法，所以一些配置就在这个方法里面调用
+    [self prepareConfig];
     self.targetController = controller;
-    self.originPoint = originPoint;
     
     // 改变转场方式
     UIViewController *targetController = controller.navigationController ? controller.navigationController : controller;
     UIViewController *selfController = self.navigationController ? self.navigationController : self;
     [targetController.view addSubview:selfController.view];
-    [targetController addChildViewController:selfController];
+//    [targetController addChildViewController:selfController];
     
     /*如果targetController为navigationController 而selfController不是navigationController，那么
      addChildViewController这个操作就会让将selfController添加到当前childController中，self也有了
      navigationController，与事实不符*/
     
     // 改变frame ---> 一般是44
-    CGFloat y = self.originPoint.y;
+//    CGFloat y = self.originPoint.y;
     if (self.isHasNavigationController) {
-        y -= 20;
+        originPoint.y -= 20;
     }
-    selfController.view.frame = CGRectMake(selfController.view.x, y, selfController.view.width, selfController.view.height);
+    selfController.view.frame = CGRectMake(selfController.view.x, originPoint.y, selfController.view.width, selfController.view.height);
     if ([targetController isKindOfClass:[UINavigationController class]]) {
         UINavigationController *nav = (UINavigationController *)targetController;
         [nav setNavigationBarHidden:YES animated:YES];
     }
-    [UIView animateWithDuration:0.3 animations:^{
+    [UIView animateWithDuration:kNavigationBarAnimationTime animations:^{
         selfController.view.y = 0;
         [self.tagView setAlpha:1];
         if (duringAnimationBlock) {
@@ -126,6 +129,8 @@
     } completion:^(BOOL finished) {
         [self.searchBar becomeFirstResponder];
     }];
+    
+    self.originPoint = originPoint;
 }
 
 - (void)hideControllerWithDuringAnimationBlock:(void (^)())duringAnimationBlock completeBlock:(void (^)())completeBlock {
@@ -135,6 +140,7 @@
         UINavigationController *nav = (UINavigationController *)targetController;
         [nav setNavigationBarHidden:NO animated:YES];
     }
+//    [self.searchBar resignFirstResponder];
     [UIView animateWithDuration:0.3 animations:^{
         selfController.view.y = self.originPoint.y;
         self.tagView.alpha = 0;

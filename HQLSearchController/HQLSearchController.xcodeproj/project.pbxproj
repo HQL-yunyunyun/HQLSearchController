@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D7112FA1ECCA4F60024A638 /* HQLMainController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D7112F91ECCA4F60024A638 /* HQLMainController.m */; };
 		4A4627B31EC16BFA00F207E1 /* UIImage+Color.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4627B21EC16BFA00F207E1 /* UIImage+Color.m */; };
 		4A680C741E8A48C700BDCD4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A680C731E8A48C700BDCD4F /* main.m */; };
 		4A680C771E8A48C700BDCD4F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A680C761E8A48C700BDCD4F /* AppDelegate.m */; };
 		4A680C7A1E8A48C700BDCD4F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A680C791E8A48C700BDCD4F /* ViewController.m */; };
-		4A680C7D1E8A48C700BDCD4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A680C7B1E8A48C700BDCD4F /* Main.storyboard */; };
 		4A680C7F1E8A48C700BDCD4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A680C7E1E8A48C700BDCD4F /* Assets.xcassets */; };
 		4A680C821E8A48C700BDCD4F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A680C801E8A48C700BDCD4F /* LaunchScreen.storyboard */; };
 		4A680C901E8A49F300BDCD4F /* UIView+General.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A680C8F1E8A49F300BDCD4F /* UIView+General.m */; };
@@ -23,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D7112F81ECCA4F60024A638 /* HQLMainController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HQLMainController.h; sourceTree = "<group>"; };
+		0D7112F91ECCA4F60024A638 /* HQLMainController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HQLMainController.m; sourceTree = "<group>"; };
 		4A4627B11EC16BFA00F207E1 /* UIImage+Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Color.h"; sourceTree = "<group>"; };
 		4A4627B21EC16BFA00F207E1 /* UIImage+Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Color.m"; sourceTree = "<group>"; };
 		4A680C6F1E8A48C700BDCD4F /* HQLSearchController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HQLSearchController.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -31,7 +33,6 @@
 		4A680C761E8A48C700BDCD4F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4A680C781E8A48C700BDCD4F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		4A680C791E8A48C700BDCD4F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		4A680C7C1E8A48C700BDCD4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4A680C7E1E8A48C700BDCD4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4A680C811E8A48C700BDCD4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4A680C831E8A48C700BDCD4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -84,7 +85,6 @@
 				4A680C761E8A48C700BDCD4F /* AppDelegate.m */,
 				4A680C781E8A48C700BDCD4F /* ViewController.h */,
 				4A680C791E8A48C700BDCD4F /* ViewController.m */,
-				4A680C7B1E8A48C700BDCD4F /* Main.storyboard */,
 				4A680C7E1E8A48C700BDCD4F /* Assets.xcassets */,
 				4A680C801E8A48C700BDCD4F /* LaunchScreen.storyboard */,
 				4A680C831E8A48C700BDCD4F /* Info.plist */,
@@ -117,6 +117,8 @@
 			children = (
 				4A680CA01E8BB66800BDCD4F /* HQLSearchController.h */,
 				4A680CA11E8BB66800BDCD4F /* HQLSearchController.m */,
+				0D7112F81ECCA4F60024A638 /* HQLMainController.h */,
+				0D7112F91ECCA4F60024A638 /* HQLMainController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -185,7 +187,7 @@
 				TargetAttributes = {
 					4A680C6E1E8A48C700BDCD4F = {
 						CreatedOnToolsVersion = 8.3;
-						DevelopmentTeam = X8GXYMZ6FW;
+						DevelopmentTeam = 98B5P59X79;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -215,7 +217,6 @@
 			files = (
 				4A680C821E8A48C700BDCD4F /* LaunchScreen.storyboard in Resources */,
 				4A680C7F1E8A48C700BDCD4F /* Assets.xcassets in Resources */,
-				4A680C7D1E8A48C700BDCD4F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,20 +237,13 @@
 				4A4627B31EC16BFA00F207E1 /* UIImage+Color.m in Sources */,
 				4A680CA21E8BB66800BDCD4F /* HQLSearchController.m in Sources */,
 				4A680C741E8A48C700BDCD4F /* main.m in Sources */,
+				0D7112FA1ECCA4F60024A638 /* HQLMainController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		4A680C7B1E8A48C700BDCD4F /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4A680C7C1E8A48C700BDCD4F /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		4A680C801E8A48C700BDCD4F /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -357,7 +351,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = X8GXYMZ6FW;
+				DEVELOPMENT_TEAM = 98B5P59X79;
 				INFOPLIST_FILE = HQLSearchController/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -370,7 +364,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = X8GXYMZ6FW;
+				DEVELOPMENT_TEAM = 98B5P59X79;
 				INFOPLIST_FILE = HQLSearchController/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
