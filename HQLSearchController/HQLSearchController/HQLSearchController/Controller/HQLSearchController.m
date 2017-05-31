@@ -140,15 +140,20 @@
         UINavigationController *nav = (UINavigationController *)targetController;
         [nav setNavigationBarHidden:NO animated:YES];
     }
-//    [self.searchBar resignFirstResponder];
+    [self.searchBar resignFirstResponder];
     [UIView animateWithDuration:0.3 animations:^{
         selfController.view.y = self.originPoint.y;
         self.tagView.alpha = 0;
+//        self.searchBar.alpha = 0;
         duringAnimationBlock ? duringAnimationBlock() : nil;
     } completion:^(BOOL finished) {
-        [selfController.view removeFromSuperview];
-        [selfController removeFromParentViewController];
-        completeBlock ? completeBlock() : nil;
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.searchBar setAlpha:0];
+        } completion:^(BOOL finished) {
+            [selfController.view removeFromSuperview];
+            [selfController removeFromParentViewController];
+            completeBlock ? completeBlock() : nil;
+        }];
     }];
 }
 

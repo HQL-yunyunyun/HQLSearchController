@@ -39,14 +39,14 @@
 
 // searchBar 开始编辑
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-//    HQLSearchController *controller = [HQLSearchController new];
-//    controller.delegate = self;
-//    self.searchController = [[UINavigationController alloc] initWithRootViewController:controller];
-//    __weak typeof(self) weakSelf = self;
-//    [controller showInViewController:self searchBarOriginPoint:self.searchBar.frame.origin duringAnimation:^{
-//        weakSelf.searchBar.frame = CGRectMake(0, 0, weakSelf.view.frame.size.width, 44);
-//    }];
-    return YES;
+    HQLSearchController *controller = [HQLSearchController new];
+    controller.delegate = self;
+    self.searchController = [[UINavigationController alloc] initWithRootViewController:controller];
+    __weak typeof(self) weakSelf = self;
+    [controller showInViewController:self searchBarOriginPoint:self.searchBar.frame.origin duringAnimation:^{
+        weakSelf.searchBar.frame = CGRectMake(0, 0, weakSelf.view.frame.size.width, 44);
+    }];
+    return NO;
 }
 
 #pragma mark - search controller delegate
@@ -59,10 +59,11 @@
     __weak typeof(self) weakSelf = self;
     [searchController hideControllerWithDuringAnimationBlock:^{
         weakSelf.searchBar.frame = CGRectMake(0, 64, weakSelf.view.frame.size.width, 44);
-        [weakSelf.searchBar becomeFirstResponder];
+        
+//        [weakSelf.searchBar becomeFirstResponder];
 //        [weakSelf.view layoutIfNeeded];
     } completeBlock:^{
-        [weakSelf.searchBar resignFirstResponder];
+//        [weakSelf.searchBar resignFirstResponder];
         weakSelf.searchController = nil;
     }];
 }
@@ -97,7 +98,7 @@
     if (!_searchBar) {
         _searchBar = [[HQLSearchBar alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 44)];
         _searchBar.delegate = self;
-        [_searchBar setShowsCancelButton:YES animated:YES];
+        [_searchBar setShowsCancelButton:NO animated:NO];
         
         [self.view addSubview:_searchBar];
     }
