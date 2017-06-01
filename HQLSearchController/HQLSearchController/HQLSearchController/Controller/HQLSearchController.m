@@ -95,6 +95,7 @@
     [self.resultView reloadData];
 }
 
+// 显示
 - (void)showInViewController:(UIViewController *)controller searchBarOriginPoint:(CGPoint)originPoint duringAnimation:(void(^)())duringAnimationBlock {
     // 因为在这个方法的时候 controller还没有调用didLoad方法，所以一些配置就在这个方法里面调用
     [self prepareConfig];
@@ -123,9 +124,8 @@
     [UIView animateWithDuration:kNavigationBarAnimationTime animations:^{
         selfController.view.y = 0;
         [self.tagView setAlpha:1];
-        if (duringAnimationBlock) {
-            duringAnimationBlock();
-        }
+        [self.effectView setAlpha:1];
+        duringAnimationBlock ? duringAnimationBlock() : nil;
     } completion:^(BOOL finished) {
         [self.searchBar becomeFirstResponder];
     }];
@@ -133,6 +133,7 @@
     self.originPoint = originPoint;
 }
 
+// 隐藏
 - (void)hideControllerWithDuringAnimationBlock:(void (^)())duringAnimationBlock completeBlock:(void (^)())completeBlock {
     UIViewController *targetController = self.targetController.navigationController ? self.targetController.navigationController : self.targetController;
     UIViewController *selfController = self.isHasNavigationController ? self.navigationController : self;
@@ -144,11 +145,13 @@
     [UIView animateWithDuration:0.3 animations:^{
         selfController.view.y = self.originPoint.y;
         self.tagView.alpha = 0;
+        [self.resultView setHidden:YES];
 //        self.searchBar.alpha = 0;
         duringAnimationBlock ? duringAnimationBlock() : nil;
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.3 animations:^{
             [self.searchBar setAlpha:0];
+            [self.effectView setAlpha:0];
         } completion:^(BOOL finished) {
             [selfController.view removeFromSuperview];
             [selfController removeFromParentViewController];
@@ -169,6 +172,7 @@
 
 // 点击搜索
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [self searchWithKeyWord:searchBar.text];
     if ([self.delegate respondsToSelector:@selector(searchController:searchBarDidClickSearchButton:)]) {
         [self.delegate searchController:self searchBarDidClickSearchButton:(HQLSearchBar *)searchBar];
     }
@@ -187,7 +191,7 @@
 
 // searchBar的text改变
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    [self searchWithKeyWord:searchText];
+    
 }
 
 #pragma mark - search tag view delegate
@@ -275,6 +279,7 @@
     if (!_effectView) {
         _effectView = [[UIVisualEffectView alloc] initWithFrame:self.view.bounds];
         [_effectView setEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+        [_effectView setAlpha:0];
         [self.view insertSubview:_effectView atIndex:0];
     }
     return _effectView;
