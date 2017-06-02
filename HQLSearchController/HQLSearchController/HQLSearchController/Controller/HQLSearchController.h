@@ -17,9 +17,8 @@
  根据keyWord搜索
 
  @param keyWord keyWord
- @return result
  */
-- (NSArray <NSString *>*)searchControllerDidSearchWithKeyWord:(NSString *)keyWord;
+- (void)searchController:(HQLSearchController *)searchController didSearchWithKeyWord:(NSString *)keyWord;
 
 /**
  按下取消键
@@ -59,5 +58,7 @@
 // 显示Controller
 - (void)showInViewController:(UIViewController *)controller searchBarOriginPoint:(CGPoint)originPoint duringAnimation:(void(^)())duringAnimationBlock;
 - (void)hideControllerWithDuringAnimationBlock:(void(^)())duringAnimationBlock completeBlock:(void(^)())completeBlock;
+
+- (void)searchWithSearchText:(NSString *)searchText;
 
 @end

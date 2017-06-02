@@ -73,15 +73,15 @@
 - (void)searchWithKeyWord:(NSString *)keyWord {
     
     [self.searchResultArray removeAllObjects];
+    [self.resultView reloadData];
     
     if (keyWord && ![keyWord isEqualToString:@""]) { // 有值且不为空
         [self.tagView setHidden:YES];
         [self.resultView setHidden:NO];
         // 搜索
-        if ([self.delegate respondsToSelector:@selector(searchControllerDidSearchWithKeyWord:)]) {
-            [self.searchResultArray addObjectsFromArray:[self.delegate searchControllerDidSearchWithKeyWord:keyWord]];
+        if ([self.delegate respondsToSelector:@selector(searchController:didSearchWithKeyWord:)]) {
+            [self.delegate searchController:self didSearchWithKeyWord:keyWord];
         }
-        [self.resultView reloadData];
     } else { // 没值
         [self.tagView setHidden:NO];
         [self.resultView setHidden:YES];
@@ -94,6 +94,13 @@
     [self.searchResultArray addObjectsFromArray:resultArray];
     [self.resultView reloadData];
 }
+
+- (void)searchWithSearchText:(NSString *)searchText {
+    self.searchBar.text = searchText;
+    [self searchWithKeyWord:searchText];
+}
+
+#pragma mark - transform method
 
 // 显示
 - (void)showInViewController:(UIViewController *)controller searchBarOriginPoint:(CGPoint)originPoint duringAnimation:(void(^)())duringAnimationBlock {
@@ -146,7 +153,6 @@
         selfController.view.y = self.originPoint.y;
         self.tagView.alpha = 0;
         [self.resultView setHidden:YES];
-//        self.searchBar.alpha = 0;
         duringAnimationBlock ? duringAnimationBlock() : nil;
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.3 animations:^{
@@ -178,20 +184,21 @@
     }
 }
 
-/*
+
 - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     if (searchBar == self.searchBar) {
-        NSString *targetString = searchBar.text;
-        [targetString stringByReplacingCharactersInRange:range withString:text];
-        [self searchWithKeyWord:targetString];
+        if ([text isEqualToString:@""]) { // 删除字符
+            [self searchWithKeyWord:@""];
+        }
     }
     return YES;
 }
-*/
 
 // searchBar的text改变
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    
+    if ([searchText isEqualToString:@""]) {
+        [self searchWithKeyWord:searchText];
+    }
 }
 
 #pragma mark - search tag view delegate
@@ -243,6 +250,12 @@
     }
 }
 
+#pragma mark - scroll view delegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self.searchBar resignFirstResponder];
+}
+
 #pragma mark - getter
 
 - (HQLSearchBar *)searchBar {
@@ -269,6 +282,7 @@
     if (!_tagView) {
         _tagView = [[HQLSearchTagView alloc] initWithFrame:self.view.bounds];
         _tagView.delegate = self;
+        _tagView.hql_delegate = self;
         [self.view insertSubview:_tagView atIndex:1];
         [_tagView setAlpha:0];
     }

@@ -13,6 +13,7 @@
 #import "HQLSearchTagView.h"
 
 #define HQLSearchHistorySaveKey @"HQLSearchHistorySaveKey"
+#define HQLSearchHistoryTagViewTitle @"搜索记录"
 
 @interface HQLMainController ()<UISearchBarDelegate, HQLSearchControllerDelegate>
 
@@ -21,6 +22,8 @@
 
 @property (strong, nonatomic) UINavigationController *searchNavigationController;
 @property (strong, nonatomic) HQLSearchController *searchController;
+
+@property (strong, nonatomic) NSMutableArray <NSString *>*searchResultArray; // 搜索结果
 
 @property (strong, nonatomic) NSMutableArray <NSString *>*searchHistory; // 搜索历史
 
@@ -44,6 +47,7 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self searchBar];
     [self imageView];
+    [self tagViewDataSourceConfig];
 }
 
 - (void)saveSearchHistory {
@@ -54,8 +58,8 @@
 - (void)tagViewDataSourceConfig {
     if (self.searchHistory.count != 0) { // 表示有历史记录
         HQLSearchTagComponentModel *model = [[HQLSearchTagComponentModel alloc] init];
-        model.dataSource = self.searchHistory.copy;
-        model.title = @"搜索记录";
+        model.dataSource = self.searchHistory;
+        model.title = HQLSearchHistoryTagViewTitle;
         model.titleRightCustomView = self.removeSearchHistoryButton;
         [self.tagViewDataSource addObject:model];
     }
@@ -96,8 +100,17 @@
 
 #pragma mark - search controller delegate
 
-- (NSArray<NSString *> *)searchControllerDidSearchWithKeyWord:(NSString *)keyWord {
-    return @[@"ye"];
+- (void)searchController:(HQLSearchController *)searchController didSearchWithKeyWord:(NSString *)keyWord {
+    [self.searchResultArray removeAllObjects];
+    NSInteger randomNum = arc4random_uniform(10);
+    for (int i = 0; i < randomNum; i++) {
+        [self.searchResultArray addObject:[NSString stringWithFormat:@"search result %d", i]];
+    }
+    // 两秒之后
+    __weak typeof(self) weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [searchController setSearchResultWithResultArray:weakSelf.searchResultArray];
+    });
 }
 
 - (void)searchController:(HQLSearchController *)searchController searchBarCancelButtonDidClick:(HQLSearchBar *)searchBar {
@@ -111,25 +124,44 @@
 }
 
 - (void)searchController:(HQLSearchController *)searchController searchTagView:(HQLSearchTagView *)searchTagView didClickTagButton:(NSIndexPath *)indexPath {
-
+    HQLSearchTagComponentModel *model = self.tagViewDataSource[indexPath.section];
+    // 如果第一个是搜索历史
+    if ([model.title isEqualToString:HQLSearchHistoryTagViewTitle]) {
+        [searchController searchWithSearchText:model.dataSource[indexPath.row]];
+    } else { // 其他
+        NSLog(@"click tag view button : %@", model.dataSource[indexPath.row]);
+    }
 }
 
 // 点击了结果
 - (void)searchController:(HQLSearchController *)searchController resultView:(UITableView *)resultView didSelectedResultViewCell:(NSIndexPath *)indexPath{
-
+    NSLog(@"did click result : %@", self.searchResultArray[indexPath.row]);
 }
 
 // 点击了搜索
 - (void)searchController:(HQLSearchController *)searchController searchBarDidClickSearchButton:(HQLSearchBar *)searchBar {
     // 保存searchBar.text
-    [self.searchHistory addObject:searchBar.text];
+    NSString *deleString = nil;
+    for (NSString *string in self.searchHistory) {
+        if ([searchBar.text isEqualToString:string]) {
+            deleString = string;
+            break;
+        }
+    }
+    if (deleString) {
+        [self.searchHistory removeObject:deleString];
+    }
+    
+    [self.searchHistory insertObject:searchBar.text atIndex:0];
     [self saveSearchHistory];
     
-    HQLSearchTagComponentModel *model = [[HQLSearchTagComponentModel alloc] init];
-    model.dataSource = self.searchHistory.copy;
-    model.title = @"搜索记录";
-    model.titleRightCustomView = self.removeSearchHistoryButton;
-    [self.tagViewDataSource insertObject:model atIndex:0];
+    if (self.searchHistory.count == 1) {
+        HQLSearchTagComponentModel *model = [[HQLSearchTagComponentModel alloc] init];
+        model.dataSource = self.searchHistory;
+        model.title = HQLSearchHistoryTagViewTitle;
+        model.titleRightCustomView = self.removeSearchHistoryButton;
+        [self.tagViewDataSource insertObject:model atIndex:0];
+    }
     
     searchController.tagViewDataSource = self.tagViewDataSource;
 }
@@ -180,10 +212,19 @@
     if (!_removeSearchHistoryButton) {
         _removeSearchHistoryButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_removeSearchHistoryButton setTitle:@"清除搜索记录" forState:UIControlStateNormal];
+        [_removeSearchHistoryButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_removeSearchHistoryButton.titleLabel setFont:[UIFont systemFontOfSize:10]];
         [_removeSearchHistoryButton sizeToFit];
+        [_removeSearchHistoryButton addTarget:self action:@selector(removeSearchHistoryButtonDidClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _removeSearchHistoryButton;
+}
+
+- (NSMutableArray<NSString *> *)searchResultArray {
+    if (!_searchResultArray) {
+        _searchResultArray = [NSMutableArray array];
+    }
+    return _searchResultArray;
 }
 
 @end
